@@ -1,0 +1,571 @@
+<title>파미 식물 가이드</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+/* layout: sticky search header over a single scrolling column; detail renders as a results list below the field */
+:root{
+  --bg:#F5F7F1;
+  --surface:#FFFFFF;
+  --surface-2:#EBF0E5;
+  --fg:#1B2A1C;
+  --muted:#5E6E5F;
+  --border:#DBE3D3;
+  --accent:#2E6B4C;
+  --accent-fg:#FAFDF8;
+  --glow:#C97A2B;
+  --glow-soft:#F6E6D2;
+  --shadow: 0 1px 2px rgba(27,42,28,.06), 0 8px 24px -12px rgba(27,42,28,.18);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10150F;
+    --surface:#171D14;
+    --surface-2:#1F2819;
+    --fg:#E8EEE4;
+    --muted:#96A390;
+    --border:#2B3426;
+    --accent:#6FCB9B;
+    --accent-fg:#0A1710;
+    --glow:#E6A34E;
+    --glow-soft:#352611;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10150F;
+  --surface:#171D14;
+  --surface-2:#1F2819;
+  --fg:#E8EEE4;
+  --muted:#96A390;
+  --border:#2B3426;
+  --accent:#6FCB9B;
+  --accent-fg:#0A1710;
+  --glow:#E6A34E;
+  --glow-soft:#352611;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  color-scheme: dark;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:"Inter",system-ui,-apple-system,"Noto Sans KR",sans-serif;
+  min-height:100%;
+}
+.wrap{
+  max-width:760px;
+  margin:0 auto;
+  padding-left:max(16px, env(safe-area-inset-left,0px));
+  padding-right:max(16px, env(safe-area-inset-right,0px));
+  padding-bottom:48px;
+}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif;letter-spacing:-0.01em;text-wrap:balance;margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+
+/* header */
+.topband{
+  position:sticky;
+  top:env(safe-area-inset-top,0px);
+  z-index:10;
+  background:var(--bg);
+  padding-top:calc(env(safe-area-inset-top,0px) + 22px);
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0 0 auto;
+  height:env(safe-area-inset-top,0px);
+  z-index:10;
+  background:var(--bg);
+}
+.brand{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  margin-bottom:14px;
+}
+.brand .mark{
+  width:28px;height:28px;flex:none;border-radius:8px;
+  background:var(--accent);color:var(--accent-fg);
+  display:flex;align-items:center;justify-content:center;
+}
+.brand .mark svg{width:16px;height:16px}
+.brand h1{font-size:1.15rem;font-weight:600}
+.brand .tag{font-size:.78rem;color:var(--muted)}
+
+.searchbox{position:relative}
+.searchbox input{
+  width:100%;
+  padding:14px 44px 14px 16px;
+  border-radius:12px;
+  border:1.5px solid var(--border);
+  background:var(--surface);
+  color:var(--fg);
+  font-size:1rem;
+  font-family:inherit;
+  outline:none;
+}
+.searchbox input:focus{border-color:var(--accent)}
+.searchbox .clear{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  width:28px;height:28px;border:none;background:transparent;color:var(--muted);
+  cursor:pointer;border-radius:6px;display:none;align-items:center;justify-content:center;
+}
+.searchbox .clear.show{display:flex}
+.searchbox .clear:hover{background:var(--surface-2)}
+
+.suggest{
+  margin-top:8px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--surface);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  max-height:min(360px, 60vh);
+  overflow-y:auto;
+}
+.suggest[hidden]{display:none}
+.suggest .item{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;cursor:pointer;
+  border-bottom:1px solid var(--border);
+}
+.suggest .item:last-child{border-bottom:none}
+.suggest .item:hover,.suggest .item.active{background:var(--surface-2)}
+.suggest .item .nm{font-weight:600;flex:1;min-width:0}
+.suggest .item .nm mark{background:transparent;color:var(--accent);font-weight:700}
+.suggest .item .ctx{font-size:.78rem;color:var(--muted);flex:none;max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.suggest .hint{padding:10px 14px;font-size:.8rem;color:var(--muted)}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{
+  font-size:.82rem;padding:7px 13px;border-radius:999px;
+  border:1px solid var(--border);background:var(--surface);color:var(--fg);
+  cursor:pointer;
+}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chips .lbl{font-size:.82rem;color:var(--muted);padding:7px 2px}
+
+/* body content */
+.content{padding-top:22px}
+
+.empty{
+  text-align:center;padding:52px 16px 20px;color:var(--muted);
+}
+.empty svg{width:40px;height:40px;color:var(--accent);margin-bottom:14px}
+.empty h2{font-size:1.2rem;color:var(--fg);margin-bottom:6px}
+.empty p{margin:0;font-size:.92rem}
+
+.result{display:none;flex-direction:column;gap:16px}
+.result.show{display:flex}
+
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:20px;box-shadow:var(--shadow);
+}
+.ph-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ph-name{font-size:1.5rem;font-weight:600}
+.ph-sci{font-style:italic;color:var(--muted);font-size:.92rem;margin-top:3px}
+.badge{
+  font-size:.74rem;font-weight:600;color:var(--accent);background:var(--surface-2);
+  border-radius:999px;padding:5px 11px;white-space:nowrap;
+}
+.ph-sub{font-size:.8rem;color:var(--muted);margin-top:2px}
+
+.fami{
+  margin-top:16px;
+  background:var(--glow-soft);
+  border:1px solid color-mix(in srgb, var(--glow) 35%, transparent);
+  border-radius:12px;
+  padding:14px 16px;
+  display:flex;align-items:center;gap:12px;
+}
+.fami svg{width:22px;height:22px;flex:none;color:var(--glow)}
+.fami .k{font-size:.74rem;color:var(--muted);letter-spacing:.03em}
+.fami .v{font-size:1.05rem;font-weight:600;color:var(--fg)}
+
+.grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;
+  margin-top:14px;
+}
+.cell{background:var(--surface);padding:11px 13px;min-width:0}
+.cell .k{font-size:.72rem;color:var(--muted);letter-spacing:.02em;margin-bottom:3px}
+.cell .v{font-size:.92rem;font-weight:500}
+.cell .v.mono{font-size:.88rem}
+@media (max-width:480px){.grid{grid-template-columns:1fr}}
+
+.note{margin-top:14px;font-size:.88rem;color:var(--muted);line-height:1.55;padding:12px 14px;background:var(--surface-2);border-radius:10px}
+.note b{color:var(--fg);font-weight:600}
+
+.src{margin-top:14px;display:flex;gap:14px;flex-wrap:wrap}
+.src a{font-size:.8rem;color:var(--accent);text-decoration:none}
+.src a:hover{text-decoration:underline}
+
+.more-list{display:flex;flex-direction:column;gap:0}
+.more-list .row{display:flex;align-items:center;justify-content:space-between;padding:11px 2px;border-bottom:1px solid var(--border);cursor:pointer}
+.more-list .row:last-child{border-bottom:none}
+.more-list .row:hover .nm{color:var(--accent)}
+.more-list .nm{font-weight:500}
+.more-list .fami-mini{font-size:.78rem;color:var(--muted)}
+
+.browse{margin-top:28px}
+.browse summary{cursor:pointer;font-size:.88rem;color:var(--muted);padding:8px 0;list-style:none}
+.browse summary::-webkit-details-marker{display:none}
+.browse summary:before{content:"전체 식물 목록 (300종)";}
+.browse[open] summary:before{content:"목록 접기";}
+.cat-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 12px}
+.cat-tab{font-size:.76rem;padding:5px 10px;border-radius:999px;border:1px solid var(--border);background:var(--surface);cursor:pointer;color:var(--muted)}
+.cat-tab.active{border-color:var(--accent);color:var(--accent);background:var(--surface-2)}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;max-height:340px;overflow-y:auto;padding-right:4px}
+@media (max-width:480px){.cat-grid{grid-template-columns:1fr}}
+.cat-grid button{
+  text-align:left;background:none;border:none;padding:7px 0;font-size:.86rem;color:var(--fg);
+  cursor:pointer;border-bottom:1px solid var(--border);font-family:inherit;
+}
+.cat-grid button:hover{color:var(--accent)}
+
+footer{margin-top:36px;text-align:center;font-size:.76rem;color:var(--muted)}
+</style>
+
+<div class="wrap">
+  <div class="topband">
+    <div class="brand">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22V12M12 12C12 7 9 4 4 4c0 5 3 8 8 8ZM12 12c0-5 3-8 8-8 0 5-3 8-8 8Z"/></svg>
+      </span>
+      <h1>파미 식물 가이드</h1>
+      <span class="tag">내 식물에 맞는 파미 찾기</span>
+    </div>
+    <div class="searchbox">
+      <input id="q" type="text" placeholder="식물 이름을 검색해보세요 (예: 몬스테라)" autocomplete="off" aria-label="식물 이름 검색">
+      <button class="clear" id="clearBtn" aria-label="지우기" type="button">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div id="suggest" class="suggest" hidden></div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div class="content">
+    <div id="emptyState" class="empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <h2 data-count>300종의 식물 데이터를 불러오는 중…</h2>
+      <p>식물 이름을 입력하면 추천 파미와 재배 정보를 보여드려요.</p>
+    </div>
+
+    <div id="result" class="result"></div>
+
+    <details class="browse">
+      <summary></summary>
+      <div class="cat-tabs" id="catTabs"></div>
+      <div class="cat-grid" id="catGrid"></div>
+    </details>
+
+    <footer>라이팜 파미 · 300종 식물 데이터 기준 · 재배 환경에 따라 세부 설정은 달라질 수 있어요</footer>
+  </div>
+</div>
+
+<script>
+(function(){
+  var DATA = [];
+  var els = {
+    q: document.getElementById('q'),
+    clearBtn: document.getElementById('clearBtn'),
+    suggest: document.getElementById('suggest'),
+    chips: document.getElementById('chips'),
+    emptyState: document.getElementById('emptyState'),
+    result: document.getElementById('result'),
+    catTabs: document.getElementById('catTabs'),
+    catGrid: document.getElementById('catGrid')
+  };
+  var QUICK = ["몬스테라","스투키","올리브나무","스위트바질","뱅갈고무나무"];
+  var activeIndex = -1;
+  var currentMatches = [];
+
+  function norm(s){
+    return (s||'').toString().trim().toLowerCase().replace(/\s+/g,'');
+  }
+
+  function aliasesOf(p){
+    var list = [p.n];
+    if (p.al) {
+      p.al.split(',').forEach(function(a){
+        a = a.trim();
+        if (a && list.indexOf(a) === -1) list.push(a);
+      });
+    }
+    return list;
+  }
+
+  function scorePlant(nq, p){
+    var best = 0;
+    aliasesOf(p).forEach(function(a){
+      var na = norm(a);
+      if (!na) return;
+      var s = 0;
+      if (na === nq) s = 100;
+      else if (na.indexOf(nq) === 0) s = 80;
+      else if (na.indexOf(nq) !== -1) s = 60;
+      else if (nq.length >= 2 && nq.indexOf(na) !== -1) s = 40;
+      if (s > best) best = s;
+    });
+    return best;
+  }
+
+  function levenshtein(a, b){
+    var m = a.length, n = b.length;
+    if (!m) return n;
+    if (!n) return m;
+    var prev = new Array(n + 1);
+    for (var j = 0; j <= n; j++) prev[j] = j;
+    for (var i = 1; i <= m; i++) {
+      var cur = [i];
+      for (var k = 1; k <= n; k++) {
+        var cost = a[i-1] === b[k-1] ? 0 : 1;
+        cur[k] = Math.min(prev[k] + 1, cur[k-1] + 1, prev[k-1] + cost);
+      }
+      prev = cur;
+    }
+    return prev[n];
+  }
+
+  function search(query){
+    var nq = norm(query);
+    if (!nq) return { exact: [], fuzzy: [] };
+    var scored = DATA.map(function(p){ return { p: p, s: scorePlant(nq, p) }; })
+                      .filter(function(x){ return x.s > 0; });
+    if (scored.length) {
+      scored.sort(function(a, b){
+        if (b.s !== a.s) return b.s - a.s;
+        return a.p.n.length - b.p.n.length;
+      });
+      return { exact: scored.slice(0, 8).map(function(x){ return x.p; }), fuzzy: [] };
+    }
+    if (nq.length >= 2) {
+      var withDist = DATA.map(function(p){
+        return { p: p, d: levenshtein(nq, norm(p.n)) };
+      });
+      withDist.sort(function(a, b){ return a.d - b.d; });
+      var threshold = Math.max(1, Math.floor(nq.length * 0.4));
+      var near = withDist.filter(function(x){ return x.d <= threshold; }).slice(0, 5);
+      return { exact: [], fuzzy: near.map(function(x){ return x.p; }) };
+    }
+    return { exact: [], fuzzy: [] };
+  }
+
+  function escapeHtml(s){
+    return (s||'').toString().replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  function highlight(name){
+    return escapeHtml(name);
+  }
+
+  function renderSuggest(query){
+    var nq = norm(query);
+    var res = search(query);
+    var list = res.exact.length ? res.exact : res.fuzzy;
+    var isFuzzy = !res.exact.length && res.fuzzy.length > 0;
+    currentMatches = list;
+    activeIndex = -1;
+
+    if (!query) {
+      els.suggest.hidden = true;
+      els.suggest.innerHTML = '';
+      return;
+    }
+    if (!list.length) {
+      els.suggest.hidden = false;
+      els.suggest.innerHTML = '<div class="hint">"' + escapeHtml(query) + '"와(과) 일치하는 식물을 찾지 못했어요. 다른 이름으로 검색해보세요.</div>';
+      return;
+    }
+    var html = '';
+    if (isFuzzy) html += '<div class="hint">정확히 일치하진 않지만, 혹시 이 식물을 찾으시나요?</div>';
+    list.forEach(function(p, i){
+      html += '<div class="item" data-idx="' + i + '">' +
+        '<span class="nm">' + highlight(p.n) + '</span>' +
+        '<span class="ctx">' + escapeHtml(p.cat || '') + '</span>' +
+        '</div>';
+    });
+    els.suggest.innerHTML = html;
+    els.suggest.hidden = false;
+  }
+
+  function fieldRow(k, v, mono){
+    if (!v) return '';
+    return '<div class="cell"><div class="k">' + k + '</div><div class="v' + (mono ? ' mono' : '') + '">' + escapeHtml(v) + '</div></div>';
+  }
+
+  function renderDetail(p){
+    els.emptyState.style.display = 'none';
+    var html = '';
+    html += '<div class="card">';
+    html += '<div class="ph-head"><div><div class="ph-name">' + escapeHtml(p.n) + '</div>';
+    if (p.sc) html += '<div class="ph-sci">' + escapeHtml(p.sc) + '</div>';
+    html += '</div><span class="badge">' + escapeHtml(p.cat || '') + (p.sub ? ' · ' + escapeHtml(p.sub) : '') + '</span></div>';
+
+    html += '<div class="fami">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 21h4M12 2a6 6 0 00-4 10.5c.6.6 1 1.3 1 2.5h6c0-1.2.4-1.9 1-2.5A6 6 0 0012 2z"/></svg>' +
+      '<div><div class="k">추천 파미</div><div class="v">' + escapeHtml(p.fami || '-') + '</div></div>' +
+      '</div>';
+
+    html += '<div class="grid">';
+    html += fieldRow('광 요구도', p.light);
+    html += fieldRow('배광 방식', p.beam);
+    html += fieldRow('권장 거리', p.dist, true);
+    html += fieldRow('권장 PPFD', p.ppfd, true);
+    html += fieldRow('점등 시간', p.hrs, true);
+    html += fieldRow('배치 위치', p.pos);
+    html += fieldRow('추천 흙', p.soil);
+    html += fieldRow('물주기 성향', p.water);
+    html += fieldRow('권장 온도', p.temp, true);
+    html += fieldRow('권장 습도', p.humid, true);
+    html += '</div>';
+
+    if (p.note) html += '<div class="note"><b>특이사항.</b> ' + escapeHtml(p.note) + '</div>';
+
+    var srcs = [];
+    if (p.src1) srcs.push('<a href="' + escapeHtml(p.src1) + '" target="_blank" rel="noopener">학명 참고자료 ↗</a>');
+    if (p.src2) srcs.push('<a href="' + escapeHtml(p.src2) + '" target="_blank" rel="noopener">재배 참고자료 ↗</a>');
+    if (srcs.length) html += '<div class="src">' + srcs.join('') + '</div>';
+
+    html += '</div>';
+    els.result.innerHTML = html;
+    els.result.classList.add('show');
+  }
+
+  function selectPlant(p){
+    els.q.value = p.n;
+    els.suggest.hidden = true;
+    els.suggest.innerHTML = '';
+    renderDetail(p);
+  }
+
+  function clearSearch(){
+    els.q.value = '';
+    els.suggest.hidden = true;
+    els.suggest.innerHTML = '';
+    els.result.classList.remove('show');
+    els.result.innerHTML = '';
+    els.emptyState.style.display = '';
+    els.clearBtn.classList.remove('show');
+    els.q.focus();
+  }
+
+  function setActive(i){
+    var items = els.suggest.querySelectorAll('.item');
+    items.forEach(function(el){ el.classList.remove('active'); });
+    if (items[i]) {
+      items[i].classList.add('active');
+      items[i].scrollIntoView({ block: 'nearest' });
+    }
+    activeIndex = i;
+  }
+
+  els.q.addEventListener('input', function(){
+    els.clearBtn.classList.toggle('show', !!els.q.value);
+    renderSuggest(els.q.value);
+  });
+
+  els.q.addEventListener('keydown', function(e){
+    var items = els.suggest.querySelectorAll('.item');
+    if (e.key === 'ArrowDown') {
+      if (!items.length) return;
+      e.preventDefault();
+      setActive(Math.min(activeIndex + 1, items.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      if (!items.length) return;
+      e.preventDefault();
+      setActive(Math.max(activeIndex - 1, 0));
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      var pick = currentMatches[activeIndex >= 0 ? activeIndex : 0];
+      if (pick) selectPlant(pick);
+    } else if (e.key === 'Escape') {
+      els.suggest.hidden = true;
+    }
+  });
+
+  els.suggest.addEventListener('click', function(e){
+    var item = e.target.closest('.item');
+    if (!item) return;
+    var idx = parseInt(item.getAttribute('data-idx'), 10);
+    var pick = currentMatches[idx];
+    if (pick) selectPlant(pick);
+  });
+
+  els.clearBtn.addEventListener('click', clearSearch);
+
+  document.addEventListener('click', function(e){
+    if (!e.target.closest('.searchbox') && !e.target.closest('#suggest')) {
+      els.suggest.hidden = true;
+    }
+  });
+
+  function renderChips(){
+    var html = '<span class="lbl">인기 검색</span>';
+    QUICK.forEach(function(name){
+      html += '<button type="button" class="chip" data-name="' + escapeHtml(name) + '">' + escapeHtml(name) + '</button>';
+    });
+    els.chips.innerHTML = html;
+    els.chips.addEventListener('click', function(e){
+      var btn = e.target.closest('.chip');
+      if (!btn) return;
+      var name = btn.getAttribute('data-name');
+      var found = DATA.find(function(p){ return p.n === name; });
+      if (found) selectPlant(found);
+    });
+  }
+
+  function renderBrowse(){
+    var cats = [];
+    DATA.forEach(function(p){ if (p.cat && cats.indexOf(p.cat) === -1) cats.push(p.cat); });
+    var active = cats[0];
+
+    function draw(){
+      els.catTabs.innerHTML = cats.map(function(c){
+        return '<button type="button" class="cat-tab' + (c === active ? ' active' : '') + '" data-cat="' + escapeHtml(c) + '">' + escapeHtml(c) + '</button>';
+      }).join('');
+      var items = DATA.filter(function(p){ return p.cat === active; }).sort(function(a,b){ return a.n.localeCompare(b.n, 'ko'); });
+      els.catGrid.innerHTML = items.map(function(p, i){
+        return '<button type="button" data-i="' + i + '">' + escapeHtml(p.n) + '</button>';
+      }).join('');
+      els.catGrid.querySelectorAll('button').forEach(function(btn, i){
+        btn.addEventListener('click', function(){ selectPlant(items[i]); document.querySelector('.browse').open = false; window.scrollTo({top:0, behavior:'smooth'}); });
+      });
+    }
+
+    els.catTabs.addEventListener('click', function(e){
+      var btn = e.target.closest('.cat-tab');
+      if (!btn) return;
+      active = btn.getAttribute('data-cat');
+      draw();
+    });
+
+    draw();
+  }
+
+  fetch('./plantdb.json')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      DATA = data;
+      document.querySelector('[data-count]').textContent = DATA.length + '종의 식물, 어떤 파미가 필요하신가요?';
+      renderChips();
+      renderBrowse();
+    })
+    .catch(function(){
+      document.querySelector('[data-count]').textContent = '데이터를 불러오지 못했어요.';
+    });
+})();
+</script>
