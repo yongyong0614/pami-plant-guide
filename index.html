@@ -56,8 +56,11 @@
 }
 
 html{font-size:16px}
+html{font-size:16px}
 @media (max-width:640px){
   html{font-size:19px}
+  .content{padding-top:14px}
+  .empty{padding-top:28px}
 }
 *{box-sizing:border-box}
 body{
@@ -65,6 +68,8 @@ body{
   color:var(--fg);
   font-family:"Inter",system-ui,-apple-system,"Noto Sans KR",sans-serif;
   min-height:100%;
+  word-break:keep-all;
+  overflow-wrap:break-word;
 }
 .wrap{
   max-width:760px;
@@ -96,8 +101,9 @@ body::before{
 }
 .brand{
   display:flex;
+  flex-wrap:wrap;
   align-items:baseline;
-  gap:10px;
+  gap:4px 10px;
   margin-bottom:14px;
 }
 .brand .mark{
@@ -256,7 +262,7 @@ footer{margin-top:36px;text-align:center;font-size:.76rem;color:var(--muted)}
       <span class="tag">내 식물에 맞는 파미 찾기</span>
     </div>
     <div class="searchbox">
-      <input id="q" type="text" placeholder="식물 이름을 검색해보세요 (예: 몬스테라)" autocomplete="off" aria-label="식물 이름 검색">
+      <input id="q" type="text" placeholder="식물 이름을 검색해보세요" autocomplete="off" aria-label="식물 이름 검색">
       <button class="clear" id="clearBtn" aria-label="지우기" type="button">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
